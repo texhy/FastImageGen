@@ -4,15 +4,11 @@ High resolution image generator using Flux, gRPC, Streamlit
 =======
 # Flux.1 with 4 bit Quantization
 
-<br>
-
 <div align = center>
 
 [![Badge Model]][Model]   
 [![Badge Colab]][Colab]
 
-<br>
-<br>
 
 <!---------------------------------------------------------------------------->
 
@@ -26,7 +22,7 @@ High resolution image generator using Flux, gRPC, Streamlit
 [Badge Colab]: https://colab.research.google.com/assets/colab-badge.svg
 
 <!---------------------------------------------------------------------------->
-
+</div>
 
 I want to train flux's LoRA using the `diffusers` library on my 16GB GPU, but it's difficult to train with flux-dev-fp8, so I want to use 4-bit weights to save VRAM.
 
