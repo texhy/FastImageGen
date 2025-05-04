@@ -1,0 +1,24 @@
+version: "3.8"
+
+services:
+  flux-server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    image: yourhubuser/flux-server:latest
+    restart: unless-stopped
+    ports:
+      - "50051:50051"   # gRPC
+      - "8000:8000"     # HTTP metrics
+    environment:
+      - API_KEYS=client1
+      - WORKER_IDLE_SEC=60
+    volumes:
+      # mount your local HF cache so the container can reuse the model weights
+      - ~/.cache/huggingface/hub:/home/app/.cache/huggingface/hub
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              capabilities: [gpu]

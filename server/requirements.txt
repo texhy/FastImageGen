@@ -1,0 +1,11 @@
+diffusers==0.33.1
+Flask==3.1.0
+grpcio==1.71.0
+nvidia_ml_py==12.570.86
+protobuf==6.30.2
+psutil==7.0.0
+pytest==8.3.5
+torch==2.7.0+cu118
+bitsandbytes>=0.43.1
+hqq @ git+https://github.com/mobiusml/hqq@306e30d
+transformers>=4.44.0
