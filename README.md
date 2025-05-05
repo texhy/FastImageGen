@@ -39,8 +39,98 @@ Generate: Generates an image based on a prompt and parameters
 | `num_inference_steps` | int    | 1–20       |
 | `guidance_scale`      | float  | 0.1–10.0   |
 
+API Endpoints
+This service exposes the following gRPC API endpoints. Each endpoint requires an "api-key" header for authentication.
 
+Note: All messages use protocol buffers defined in image_gen.proto.
 api-key: client1
+
+gRPC API
+All gRPC calls require an "api-key" header in metadata.
+
+1. Ping
+Method: rpc Ping(PingRequest) returns (PingResponse);
+
+Use: Check server availability.
+
+Returns: "Pong" message if authenticated.
+
+2. Generate
+Method: rpc Generate(GenerateRequest) returns (GenerateResponse);
+
+Use: Generate image from prompt using a diffusion model.
+
+Response: image_png (PNG-encoded bytes)
+
+Validation Rules:
+
+height, width > 0
+
+num_inference_steps: 1–20
+
+guidance_scale: 1.0–10.0
+
+Errors:
+
+UNAUTHENTICATED if API key is missing or invalid
+
+INVALID_ARGUMENT on bad input
+
+RESOURCE_EXHAUSTED if queue is busy (single job at a time)
+
+3. Metrics (optional/debug)
+Method: rpc Metrics(MetricsRequest) returns (MetricsResponse);
+
+Use: Get internal queue and processing statistics.
+
+Ping
+Method: rpc Ping(PingRequest) returns (PingResponse);
+Purpose: Health check to ensure the server is running and reachable.
+
+Request
+```bash
+message PingRequest {}
+```
+Response
+```bash
+message PingResponse {
+  string message = 1;  // Returns "Pong"
+}
+```
+
+Generate
+Method: rpc Generate(GenerateRequest) returns (GenerateResponse);
+Purpose: Generates an image based on a text prompt using a Quantized Flux Model.
+Request
+```bash
+message GenerateRequest {
+  string prompt = 1;
+  int32 height = 2;
+  int32 width = 3;
+  int32 num_inference_steps = 4;  // Must be between 1 and 20
+  float guidance_scale = 5;       // Must be between 1.0 and 10.0
+}
+```
+
+Response
+```bash
+message GenerateResponse {
+  bytes image_png = 1;  // PNG-encoded image
+}
+```
+HTTP API
+GET /metrics
+URL: http://<host>:<port>/metrics
+Purpose: Returns system and worker health metrics (no auth required).
+```bash
+{
+  "cpu_percent": 12.3,
+  "ram_used_mb": 8456,
+  "gpu_used_mb": 512,
+  "worker_alive": true,
+  "grpc_alive": true
+}
+```
 
 Sample gRPC Client (Python)
 ```bash
@@ -64,6 +154,8 @@ response = stub.Generate(
 with open("output.png", "wb") as f:
     f.write(response.image_png)
 ```
+
+
 ``` bash
 ├── server/
 │   ├── Dockerfile
