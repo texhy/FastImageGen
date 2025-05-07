@@ -51,9 +51,9 @@ WORKDIR /app
 # Copy all application files
 COPY server.py worker.py image_gen_pb2.py image_gen_pb2_grpc.py image_gen.proto requirements.txt ./
 
-# Copy model weights directly into the container
-COPY hub/models--black-forest-labs--FLUX.1-dev /root/.cache/huggingface/hub/models--black-forest-labs--FLUX.1-dev
-COPY hub/models--HighCWu--FLUX.1-dev-4bit /root/.cache/huggingface/hub/models--HighCWu--FLUX.1-dev-4bit
+# # Copy model weights directly into the container
+# COPY hub/models--black-forest-labs--FLUX.1-dev /root/.cache/huggingface/hub/models--black-forest-labs--FLUX.1-dev
+# COPY hub/models--HighCWu--FLUX.1-dev-4bit /root/.cache/huggingface/hub/models--HighCWu--FLUX.1-dev-4bit
 
 # Expose ports
 EXPOSE 50051 8000
